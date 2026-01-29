@@ -12,9 +12,9 @@ default hud_visible = True
 
 
 image bg bedroom = ConditionSwitch(
-    "player_pronouns == 'she'", "assets/images/scenes/house/feminine_bedroom_bg.png",
-    "player_pronouns == 'he'", "assets/images/scenes/house/masculine_bedroom_bg.png",
-    "True", "assets/images/scenes/house/bedroom_bg.png"  # Fallback
+    "player_pronouns == 'she'", "images/scenes/house/feminine_bedroom_bg.png",
+    "player_pronouns == 'he'", "images/scenes/house/masculine_bedroom_bg.png",
+    "True", "images/scenes/house/bedroom_bg.png"  # Fallback
 )
 
 # Declare characters used by this game. The color argument colorizes the

@@ -5,18 +5,18 @@ default inventory = {}        # { item_id: count }
 
 # Where each item’s small icon lives (use forward slashes)
 define INVENTORY_ICONS = {
-    "holy_water":        "assets/images/inventory/equipment_slot_holy_water_small.png",
-    "emf_reader":        "assets/images/inventory/equipment_slot_emf_reader_small.png",
-    "anomaly_detector":  "assets/images/inventory/equipment_slot_anamoly_detector_small.png",
-    "digital_recorder":  "assets/images/inventory/equipment_slot_digital_recorder_small.png",
-    "digital_camera":    "assets/images/inventory/equipment_slot_digital_camera_small.png",
-    "spirit_box":        "assets/images/inventory/equipment_slot_spirit_box_small.png",
-    "laser_therm":       "assets/images/inventory/equipment_slot_laser_themometer_small.png",
-    "mag_light":         "assets/images/inventory/equipment_slot_mag_light_small.png",
-    "obvilus":           "assets/images/inventory/equipment_slot_obvilus_small.png",
-    "rem_pod":           "assets/images/inventory/equipment_slot_rem_pod_small.png",
-    "go_pro":            "assets/images/inventory/equipment_slot_go_pro_small.png",
-    "bible":             "assets/images/inventory/equipment_slot_bible_icon_small.png",
+    "holy_water":        "images/inventory/equipment_slot_holy_water_small.png",
+    "emf_reader":        "images/inventory/equipment_slot_emf_reader_small.png",
+    "anomaly_detector":  "images/inventory/equipment_slot_anamoly_detector_small.png",
+    "digital_recorder":  "images/inventory/equipment_slot_digital_recorder_small.png",
+    "digital_camera":    "images/inventory/equipment_slot_digital_camera_small.png",
+    "spirit_box":        "images/inventory/equipment_slot_spirit_box_small.png",
+    "laser_therm":       "images/inventory/equipment_slot_laser_themometer_small.png",
+    "mag_light":         "images/inventory/equipment_slot_mag_light_small.png",
+    "obvilus":           "images/inventory/equipment_slot_obvilus_small.png",
+    "rem_pod":           "images/inventory/equipment_slot_rem_pod_small.png",
+    "go_pro":            "images/inventory/equipment_slot_go_pro_small.png",
+    "bible":             "images/inventory/equipment_slot_bible_icon_small.png",
     # …add others as needed
 }
 
@@ -52,7 +52,7 @@ screen inventory():
     modal True
 
     fixed:
-        add "assets/images/inventory/backpack_inventory.png"
+        add "images/inventory/backpack_inventory.png"
 
         # If empty, show your “nothing” message
         if not inventory:
@@ -85,7 +85,7 @@ screen inventory():
             if i < len(flat):
                 $ item_id = flat[i]
                 # draw the icon
-                add INVENTORY_ICONS.get(item_id, "assets/images/inventory/equipment_slot_mag_light_small.png"):
+                add INVENTORY_ICONS.get(item_id, "images/inventory/equipment_slot_mag_light_small.png"):
                     xpos sx
                     ypos sy
                     # optional scale

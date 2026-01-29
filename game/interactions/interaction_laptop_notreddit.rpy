@@ -136,11 +136,11 @@ screen laptop_notreddit_interactions():
     default nr_editing = None
 
     if notreddit_mode == "home":
-        add "assets/images/laptop/notreddit_home_screen.png"  align (0.5, 3.0) yoffset 50
+        add "images/laptop/notreddit_home_screen.png"  align (0.5, 3.0) yoffset 50
         
         imagebutton:
-            idle "assets/images/laptop/notreddit_inaght_link.png"
-            hover "assets/images/laptop/notreddit_inaght_link_hover.png"
+            idle "images/laptop/notreddit_inaght_link.png"
+            hover "images/laptop/notreddit_inaght_link_hover.png"
             xpos 1310 ypos 695
             action SetVariable("notreddit_mode", "inaght")
 
@@ -151,14 +151,14 @@ screen laptop_notreddit_interactions():
     elif notreddit_mode == "inaght":
 
         if notreddit_has_posted:
-            add "assets/images/laptop/notreddit_INAGHT_screen_afterpost.png" align (0.5, -6.0) yoffset 50
+            add "images/laptop/notreddit_INAGHT_screen_afterpost.png" align (0.5, -6.0) yoffset 50
         else:    
-            add "assets/images/laptop/notreddit_INAGHT_screen.png"  align (0.5, -6.0) yoffset 50        
+            add "images/laptop/notreddit_INAGHT_screen.png"  align (0.5, -6.0) yoffset 50        
 
         # Create Post → opens popup (no page switch)
         imagebutton:
-            idle  "assets/images/laptop/notreddit_create_post.png"
-            hover "assets/images/laptop/notreddit_create_post_hover.png"
+            idle  "images/laptop/notreddit_create_post.png"
+            hover "images/laptop/notreddit_create_post_hover.png"
             xpos 1200
             ypos 415
             sensitive (not notreddit_has_posted)
@@ -170,7 +170,7 @@ screen laptop_notreddit_interactions():
 
     elif notreddit_mode == "posted":
         # This is the "new reddit page" you want to show after posting
-        add "assets/images/laptop/notreddit_INAGHT_screen_afterpost.png" align (0.5, 0.8) yoffset 50
+        add "images/laptop/notreddit_INAGHT_screen_afterpost.png" align (0.5, 0.8) yoffset 50
 
 
 # ------------------------------
@@ -183,7 +183,7 @@ screen notreddit_compose_popup():
     zorder 100
 
     # Compose UI (center/offset as needed)
-    add "assets/images/laptop/notreddit_post_screen.png" xpos 500 ypos 200
+    add "images/laptop/notreddit_post_screen.png" xpos 500 ypos 200
 
         # Close/X
     textbutton "X":
@@ -194,8 +194,8 @@ screen notreddit_compose_popup():
 
     # Title image — clicking starts auto-typing the Subject
     imagebutton:
-        idle  "assets/images/laptop/notreddit_post_title.png"
-        hover "assets/images/laptop/notreddit_post_title_hover.png"
+        idle  "images/laptop/notreddit_post_title.png"
+        hover "images/laptop/notreddit_post_title_hover.png"
         xpos 510
         ypos 325
         action Function(nr_start_typing_field, "title",
@@ -203,8 +203,8 @@ screen notreddit_compose_popup():
 
     # Body image — clicking starts auto-typing the Body
     imagebutton:
-        idle  "assets/images/laptop/notreddit_post_body.png"
-        hover "assets/images/laptop/notreddit_post_body_hover.png"
+        idle  "images/laptop/notreddit_post_body.png"
+        hover "images/laptop/notreddit_post_body_hover.png"
         xpos 525
         ypos 550
         action Function(nr_start_typing_field, "body",
@@ -242,8 +242,8 @@ screen notreddit_compose_popup():
 
     # Post button
     imagebutton:
-        idle  "assets/images/laptop/notreddit_post_button.png"
-        hover "assets/images/laptop/notreddit_post_button_hover.png"
+        idle  "images/laptop/notreddit_post_button.png"
+        hover "images/laptop/notreddit_post_button_hover.png"
         xpos 1355
         ypos 830
         action [
