@@ -41,11 +41,11 @@ define HUD_POS = {
 init -2 python:
 
     def player_logo():
-        path = f"assets/images/hud/icons/{player_gender}_{player_race}_{player_outfit}_{player_emotion}_{player_body}_logo.png"
+        path = f"images/hud/icons/{player_gender}_{player_race}_{player_outfit}_{player_emotion}_{player_body}_logo.png"
         if renpy.loadable(path):
             return path
 
-        fallback = f"assets/images/hud/icons/{player_gender}_{player_race}_{player_outfit}_idle_{player_body}_logo.png"
+        fallback = f"images/hud/icons/{player_gender}_{player_race}_{player_outfit}_idle_{player_body}_logo.png"
         if renpy.loadable(fallback):
             return fallback
 
@@ -86,13 +86,13 @@ init -2 python:
 # ---------------------------------------------------------------------------
 
 image hud_heartbeat:
-    "assets/images/hud/heartbeat_1.png"
+    "images/hud/heartbeat_1.png"
     pause hb_delay()
-    "assets/images/hud/heartbeat_2.png"
+    "images/hud/heartbeat_2.png"
     pause hb_delay()
-    "assets/images/hud/heartbeat_3.png"
+    "images/hud/heartbeat_3.png"
     pause hb_delay()
-    "assets/images/hud/heartbeat_4.png"
+    "images/hud/heartbeat_4.png"
     pause hb_delay()
     repeat
 
@@ -140,9 +140,9 @@ screen hud_display():
         fixed:
 
             # Frames
-            add "assets/images/hud/player_status_border.png" xpos psb_x ypos psb_y
-            add "assets/images/hud/equipment_border.png"     xpos eq_x  ypos eq_y
-            add "assets/images/hud/icon_border.png"          xpos ib_x  ypos ib_y
+            add "images/hud/player_status_border.png" xpos psb_x ypos psb_y
+            add "images/hud/equipment_border.png"     xpos eq_x  ypos eq_y
+            add "images/hud/icon_border.png"          xpos ib_x  ypos ib_y
 
             # Player logo
             add DynamicImage(player_logo()) size (logo_w, logo_h) xpos logo_x ypos logo_y
@@ -174,7 +174,7 @@ screen hud_display():
                     ypos HUD_SANITY["fill_y"]
 
                 # Frame LAST
-                add "assets/images/hud/sanity_bar_bg.png"
+                add "images/hud/sanity_bar_bg.png"
 
             # Status icons
             hbox:
@@ -184,8 +184,8 @@ screen hud_display():
 
                 for s in player_statuses:
                     imagebutton:
-                        idle  "assets/images/hud/status/status_icon_%s.png" % s
-                        hover "assets/images/hud/status/status_icon_%s.png" % s
+                        idle  "images/hud/status/status_icon_%s.png" % s
+                        hover "images/hud/status/status_icon_%s.png" % s
                         action NullAction()
                         hovered SetScreenVariable("hud_tip", STATUS_LABELS.get(s, s))
                         unhovered SetScreenVariable("hud_tip", "")
@@ -206,16 +206,16 @@ screen hud_display():
                 spacing btn_spacing
 
                 imagebutton:
-                    idle  "assets/images/hud/inventory_button.png"
-                    hover "assets/images/hud/inventory_button.png"
+                    idle  "images/hud/inventory_button.png"
+                    hover "images/hud/inventory_button.png"
                     action Function(safe_show, "inventory")
 
                 imagebutton:
-                    idle  "assets/images/hud/map_button.png"
-                    hover "assets/images/hud/map_button.png"
+                    idle  "images/hud/map_button.png"
+                    hover "images/hud/map_button.png"
                     action Function(safe_show, "main_map")
 
                 imagebutton:
-                    idle  "assets/images/hud/phone_button.png"
-                    hover "assets/images/hud/phone_button.png"
+                    idle  "images/hud/phone_button.png"
+                    hover "images/hud/phone_button.png"
                     action Function(safe_show, "phone_home")

@@ -1,14 +1,14 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
 While running game code:
-  File "game/script.rpy", line 46, in script
+  File "game/story/script.rpy", line 46, in script
     show player:
-Exception: DynamicImage '[player_gender]_[player_race]_[player_outfit]_[player_body]_[player_emotion]': could not find image. ('feminine_black_casual_athletic_idle')
+Exception: DynamicImage '[player_gender]_[player_race]_[player_outfit]_[player_body]_[player_emotion]': could not find image. ('feminine_black_casual_soft_idle')
 
 -- Full Traceback ------------------------------------------------------------
 
 Traceback (most recent call last):
-  File "game/script.rpy", line 46, in script
+  File "game/story/script.rpy", line 46, in script
     show player:
   File "renpy/ast.py", line 1357, in execute
     show_imspec(self.imspec, atl=getattr(self, "atl", None))
@@ -44,9 +44,9 @@ Traceback (most recent call last):
     ~~~~~~~~~~~~~~~~^^
   File "renpy/display/image.py", line 699, in find_target
     raise Exception(error)
-Exception: DynamicImage '[player_gender]_[player_race]_[player_outfit]_[player_body]_[player_emotion]': could not find image. ('feminine_black_casual_athletic_idle')
+Exception: DynamicImage '[player_gender]_[player_race]_[player_outfit]_[player_body]_[player_emotion]': could not find image. ('feminine_black_casual_soft_idle')
 
 Windows-11-10.0.22631-SP0 AMD64
 Ren'Py 8.5.2.26010301
 FantomWorks 1.0
-Thu Jan 29 10:32:54 2026
+Thu Jan 29 11:50:07 2026

@@ -106,7 +106,7 @@ init python:
     # ----- Status helpers -----
 
     def has_status(name):
-        return name in player_statuses
+        return name in store.player_statuses
 
     def add_status(name):
         if name not in STATUS_LIST:

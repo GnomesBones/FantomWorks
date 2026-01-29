@@ -6,8 +6,8 @@ init -3 python:
         emo_name  = f"{player_gender}_{player_race}_{player_outfit}_{player_body}_{player_emotion}.png"
         base_name = f"{player_gender}_{player_race}_{player_outfit}_{player_body}.png"
 
-        emo_path  = "assets/images/character_creation/emotions/" + emo_name
-        base_path = "assets/images/character_creation/emotions/" + base_name
+        emo_path  = "images/character_creation/emotions/" + emo_name
+        base_path = "images/character_creation/emotions/" + base_name
 
         if renpy.loadable(emo_path):
             return emo_path

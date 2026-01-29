@@ -2,10 +2,10 @@
 # laptop.rpy
 ################################################################################
 # Shell frame
-image laptop_shell      = "assets/images/laptop/laptop_shell.png"
+image laptop_shell      = "images/laptop/laptop_shell.png"
 
 # Desktop / home background
-image laptop_home       = "assets/images/laptop/laptop_screen.png"
+image laptop_home       = "images/laptop/laptop_screen.png"
 
 # ---------------------------
 # State
@@ -58,38 +58,38 @@ screen laptop_home_interactions():
     # Example icon hitboxes. Replace xpos/ypos with your real positions.
     # These use the *_icon.png / *_icon_hover.png files you listed.
     imagebutton:
-        idle "assets/images/laptop/inneed_icon.png"
-        hover "assets/images/laptop/inneed_icon_hover.png"
+        idle "images/laptop/inneed_icon.png"
+        hover "images/laptop/inneed_icon_hover.png"
         xpos 354 ypos 200
         action SetVariable("laptop_page", "inneed")
 
     imagebutton:
-        idle "assets/images/laptop/notreddit_icon.png"
-        hover "assets/images/laptop/notreddit_icon_hover.png"
+        idle "images/laptop/notreddit_icon.png"
+        hover "images/laptop/notreddit_icon_hover.png"
         xpos 355 ypos 351
         action SetVariable("laptop_page", "notreddit")
 
     imagebutton:
-        idle "assets/images/laptop/schedule_icon.png"
-        hover "assets/images/laptop/schedule_icon_hover.png"
+        idle "images/laptop/schedule_icon.png"
+        hover "images/laptop/schedule_icon_hover.png"
         xpos 355 ypos 665
         action SetVariable("laptop_page", "schedule")
 
     imagebutton:
-        idle "assets/images/laptop/utoob_icon.png"
-        hover "assets/images/laptop/utoob_icon_hover.png"
+        idle "images/laptop/utoob_icon.png"
+        hover "images/laptop/utoob_icon_hover.png"
         xpos 505 ypos 265
         action SetVariable("laptop_page", "utoob")
 
     imagebutton:
-        idle "assets/images/laptop/webdive_icon.png"
-        hover "assets/images/laptop/webdive_icon_hover.png"
+        idle "images/laptop/webdive_icon.png"
+        hover "images/laptop/webdive_icon_hover.png"
         xpos 670 ypos 578
         action SetVariable("laptop_page", "webdive")
 
     imagebutton:
-        idle "assets/images/laptop/photos_icon.png"
-        hover "assets/images/laptop/photos_icon_hover.png"
+        idle "images/laptop/photos_icon.png"
+        hover "images/laptop/photos_icon_hover.png"
         xpos 665 ypos 420
         action SetVariable("laptop_page", "photos")
 

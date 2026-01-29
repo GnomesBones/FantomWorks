@@ -12,7 +12,7 @@ default interference = "None"
 
 default player_name = "Sam"
 default player_pronouns = "they"
-image bg bathroom = "menu/character_creation_bg.png"
+image bg bathroom = "images/menu/character_creation_bg.png"
 default player_body = "soft"
 default player_gender = "feminine"
 default player_race     = "black"
@@ -56,9 +56,9 @@ screen choose_character():
         $ player_race   = race_list[race_index]
 
         # The three body-type buttons
-        $ fn_slim    = "assets/images/character_creation/%s_slim_%s.png"    % (player_gender, player_race)
-        $ fn_athletic= "assets/images/character_creation/%s_athletic_%s.png"% (player_gender, player_race)
-        $ fn_soft    = "assets/images/character_creation/%s_soft_%s.png"    % (player_gender, player_race)
+        $ fn_slim    = "images/character_creation/%s_slim_%s.png"    % (player_gender, player_race)
+        $ fn_athletic= "images/character_creation/%s_athletic_%s.png"% (player_gender, player_race)
+        $ fn_soft    = "images/character_creation/%s_soft_%s.png"    % (player_gender, player_race)
 
         # Slim
         if player_body == "slim":
