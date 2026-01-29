@@ -2,13 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/interaction_laptop_notreddit.rpy", line 219: 'action' is not a keyword argument or valid child of the screen statement.
-    action [
-          ^
-            SetVariable("notreddit_has_posted", True),
-            Hide("notreddit_compose_popup"),
-            Function(nr_reset_typing)
-        ]
+File "game/hud.rpy", line 32: expected statement.
+    hbox:
+        ^
 
 Ren'Py Version: Ren'Py 8.3.7.25031702
-Mon Jan  5 15:35:09 2026
+Fri Jan 23 22:07:49 2026
