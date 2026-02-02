@@ -79,17 +79,22 @@ init python:
         else:
             s.nr_auto_typing = False
 
+
+
     def nr_on_post_submitted():
         s = renpy.store
 
-        # Mark that the first objective (make the post) is done
         s.notreddit_has_posted = True
 
-        # If you track objectives, you can update the next one here, for example:
-        # s.current_objective = "Check NotReddit for replies"
+        complete_objective("post_notreddit")
+        set_objective("meet_team")
 
-        # Jump to the story dialogue that should happen after the post
-#        renpy.call_in_new_context("after_notreddit_post")
+        # Optional debug toast
+        renpy.notify("Posted to NotReddit.")
+
+        # IMPORTANT: do not call a label from here
+        # Let your story loop detect the flag and continue.
+
 
     def nr_reset_typing():
         s = renpy.store
@@ -246,7 +251,9 @@ screen notreddit_compose_popup():
         hover "images/laptop/notreddit_post_button_hover.png"
         xpos 1355
         ypos 830
-        action [
+        action If(
+    (notreddit_title.strip() != "") and (notreddit_body.strip() != "") and (not nr_auto_typing),
+            [
             # Save what was typed as the actual posted content
             SetVariable("notreddit_post_title", notreddit_title),
             SetVariable("notreddit_post_body", notreddit_body),
@@ -260,7 +267,9 @@ screen notreddit_compose_popup():
 
             # Fire story logic (objective complete + dialogue label)
             Function(nr_on_post_submitted)
-        ]
+            ],
+            Notify("Finish writing the post first.")
+        )
 
     # Auto-typing driver
     if nr_auto_typing:

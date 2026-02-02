@@ -21,7 +21,7 @@ screen interaction_bedroom():
         xpos 1085 ypos 450    
         idle "images/scenes/house/bedroom_laptop.png"
         hover "images/scenes/house/bedroom_laptop_hover.png"
-        action Show("laptop")     
+        action [Show("laptop"), SetVariable("current_location", None)]   
 
     imagebutton:
         xpos 1710 ypos 40    

@@ -1,52 +1,46 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
 While running game code:
-  File "game/story/script.rpy", line 46, in script
-    show player:
-Exception: DynamicImage '[player_gender]_[player_race]_[player_outfit]_[player_body]_[player_emotion]': could not find image. ('feminine_black_casual_soft_idle')
+NameError: name 'player' is not defined. Did you mean: 'Layer'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "game/story/script.rpy", line 15, in script
+    player "It's late..."
+Exception: Sayer 'player' is not defined.
 
 -- Full Traceback ------------------------------------------------------------
 
 Traceback (most recent call last):
-  File "game/story/script.rpy", line 46, in script
-    show player:
-  File "renpy/ast.py", line 1357, in execute
-    show_imspec(self.imspec, atl=getattr(self, "atl", None))
-    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "renpy/ast.py", line 730, in show_imspec
-    renpy.config.show(
-    ~~~~~~~~~~~~~~~~~^
-        name, at_list=at_list, layer=layer, what=expression, zorder=zorder, tag=tag, behind=behind, atl=atl
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "renpy/exports/displayexports.py", line 513, in show
-    sls.add(
-    ~~~~~~~^
-        layer,
-        ^^^^^^
-    ...<8 lines>...
-        transient=transient,
-        ^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "renpy/display/scenelists.py", line 464, in add
-    thing.visit_all(lambda d: None)
-    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
-  File "renpy/display/displayable.py", line 457, in visit_all
-    d.visit_all(callback, seen)
-    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
-  File "renpy/display/displayable.py", line 448, in visit_all
-    for d in self.visit():
-             ~~~~~~~~~~^^ 
-  File "renpy/display/image.py", line 799, in visit
-    self.find_target()
-    ~~~~~~~~~~~~~~~~^^
-  File "renpy/display/image.py", line 699, in find_target
-    raise Exception(error)
-Exception: DynamicImage '[player_gender]_[player_race]_[player_outfit]_[player_body]_[player_emotion]': could not find image. ('feminine_black_casual_soft_idle')
+  File "renpy/ast.py", line 625, in eval_who
+    return renpy.python.py_eval(who)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "renpy/python.py", line 1305, in py_eval
+    return py_eval_bytecode(code, globals, locals)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/python.py", line 1298, in py_eval_bytecode
+    return eval(bytecode, globals, locals)
+           ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<none>", line 1, in <module>
+NameError: name 'player' is not defined. Did you mean: 'Layer'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "game/story/script.rpy", line 15, in script
+    player "It's late..."
+  File "renpy/ast.py", line 2925, in execute
+    Say.execute(self)
+    ~~~~~~~~~~~^^^^^^
+  File "renpy/ast.py", line 956, in execute
+    who = eval_who(self.who, self.who_fast)
+          ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/ast.py", line 627, in eval_who
+    raise Exception("Sayer '%s' is not defined." % who)
+Exception: Sayer 'player' is not defined.
 
 Windows-11-10.0.22631-SP0 AMD64
 Ren'Py 8.5.2.26010301
 FantomWorks 1.0
-Thu Jan 29 11:50:07 2026
+Sat Jan 31 21:57:41 2026

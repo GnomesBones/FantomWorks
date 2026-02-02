@@ -1,10 +1,6 @@
 ﻿# script.rpy
 
-################################################################################
-## The script of the game goes in this file.
-################################################################################
-
-
+# The script of the game goes in this file.
 
 ##Variables##
 
@@ -27,56 +23,62 @@ define player = Character("[player_name]", dynamic=True)
 # The game starts here.
 
 label start_story:
-    
- 
-    # Show a background. This uses a placeholder by default, but you can
-    # add a file (named either "bg room.png" or "bg room.jpg") to the
-    # images directory to show it.
+
+    $ current_location = LOC_BEDROOM
 
     scene bg bedroom with fade:
         zoom 1.0
         xalign 0.5
         yalign 0.5
 
-
-    # This shows a character sprite. 
-
-    # Use this format to show your player with all attributes
-
-    show player:
-        # This will look for: gender_race_outfit_body_emotion.png
-        "[player_gender]_[player_race]_[player_outfit]_[player_body]_[player_emotion]"
-        # Example result: "feminine_black_casual_soft_happy.png"
-        xalign 0.5 
-        yalign 1.0 # Position as needed
-
-    # These display lines of dialogue.
+    $ player_sprite = f"{player_gender}_{player_race}_{player_outfit}_{player_body}_{player_emotion}"
+    show expression player_sprite as player:
+        xalign 0.5
+        yalign 1.0
 
     player "It's late..."
-#    player "Not 'staying up' late."
-#    player "More like why am I still awake doom scrolling?"
 
     window hide
-    hide player 
+    hide player
     with dissolve
-    # This shows a screens. 
-
-    player "I want to make a ghost hunting team, maybe a post on notreddit."
-    window hide
-    
-    show screen interaction_bedroom
-
-    show screen hud_display
-    $ add_status("hexed")
-    $ add_status("stressed")
-    $ lose_sanity(75)
-
-
 
     pause
 
+    player "I want to make a ghost hunting team, maybe a post on notreddit."
+    window hide
+
+    $ set_objective("post_notreddit")
+
+    show screen interaction_bedroom
+    show screen hud_display
+
+    $ add_status("hexed")
+    $ add_status("stressed")
+    $ lose_sanity(75)
     $ remove_status("stressed")
 
-    player "Beta Done"
+    jump wait_for_notreddit_post
+
+
+label wait_for_notreddit_post:
+
+    if notreddit_has_posted:
+        call after_notreddit_post
+        return
+
+    "I should post first."
+    call screen laptop
+
+    jump wait_for_notreddit_post
+
+
+label after_notreddit_post:
+
+    hide screen laptop
+
+    "Within minutes, replies start rolling in."
+    "Some helpful. Some unhinged. One includes a blurry photo that might be a ghost, or might be a thumb."
+
+    $ set_objective("meet_team")
 
     return

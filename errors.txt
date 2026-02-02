@@ -2,9 +2,8 @@
 errors listed below, and try again.
 
 
-File "game/hud.rpy", line 32: expected statement.
-    hbox:
-        ^
+File "game/story/script.rpy", line 1: Unexpected indentation at start of file.
+    init:
 
-Ren'Py Version: Ren'Py 8.3.7.25031702
-Fri Jan 23 22:07:49 2026
+Ren'Py Version: Ren'Py 8.5.2.26010301
+Sat Jan 31 22:07:46 2026
