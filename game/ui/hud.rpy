@@ -98,6 +98,18 @@ image hud_heartbeat:
     pause hb_delay()
     repeat
 
+# ---------------------------------------------------------------------------
+# Ghost Animation
+# ---------------------------------------------------------------------------
+
+image ghost_chase:
+    "images/hud/HUD_ghost.png"
+
+#use this to change starting location, ect
+transform ghost_swoop:
+    xalign -0.2 yalign 0.05 alpha 1.0
+    linear 1.2 xalign 1.2 alpha 0.0
+
 
 # ---------------------------------------------------------------------------
 # Styles
@@ -234,3 +246,28 @@ screen hud_display():
                     idle  "images/hud/phone_button.png"
                     hover "images/hud/phone_button.png"
                     action Function(safe_show, "phone_home")
+
+
+# ---------------------------------------------------------------------------
+# Ghost Animation
+# ---------------------------------------------------------------------------
+
+
+screen objective_complete_fx(text_to_chase):
+    zorder 200
+    modal False
+
+    # Objective text that gets chased away
+    text text_to_chase:
+        xpos 1250
+        ypos 0.05
+        size 24
+        color "#FFFFFF"
+        outlines [(2, "#000000AA")]
+        at Move((0, 0.05), (0.9, 0.05), 1.2, xanchor=0.0, yanchor=0.0)
+
+    # Ghost swoops across
+    add "ghost_chase" at ghost_swoop
+
+    # Auto-hide after animation
+    timer 1.3 action Hide("objective_complete_fx")

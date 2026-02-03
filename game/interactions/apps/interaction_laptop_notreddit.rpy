@@ -79,6 +79,9 @@ init python:
         else:
             s.nr_auto_typing = False
 
+# ---------------------------------------------------------------------------
+# Ghost Animation
+# ---------------------------------------------------------------------------
 
 
     def nr_on_post_submitted():
@@ -86,7 +89,7 @@ init python:
 
         s.notreddit_has_posted = True
 
-        complete_objective("post_notreddit")
+        play_objective_complete_fx(OBJECTIVE_TEXT.get("post_notreddit", ""))
         set_objective("meet_team")
 
         # Optional debug toast

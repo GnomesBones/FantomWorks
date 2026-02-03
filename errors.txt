@@ -2,8 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/story/script.rpy", line 1: Unexpected indentation at start of file.
-    init:
+File "game/core/game_state.rpy", line 30: expected an indented block after function definition on line 5
+    renpy.show_screen("objective_complete_fx", text_to_chase=text)
+        ^^^^^
 
 Ren'Py Version: Ren'Py 8.5.2.26010301
-Sat Jan 31 22:07:46 2026
+Mon Feb  2 22:36:37 2026

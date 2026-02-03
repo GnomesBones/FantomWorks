@@ -13,7 +13,7 @@ define LOC_HALLWAY  = "hallway"
 define LOC_ENTRY    = "entry"
 
 # Where the player is right now
-#default current_location = LOC_BEDROOM
+default current_location = LOC_BEDROOM
 
 # Optional: a simple helper so labels can call one thing
 init python:

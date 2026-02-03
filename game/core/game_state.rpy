@@ -26,6 +26,9 @@ init python:
     def set_objective(name):
         store.current_objective = name
 
+    def play_objective_complete_fx(text):
+        renpy.show_screen("objective_complete_fx", text_to_chase=text)
+
     def objective_text():
         return OBJECTIVE_TEXT.get(store.current_objective, "")
 
@@ -37,3 +40,4 @@ init python:
             store.obj_meet_team_done = True
         elif name == "prep_mission":
             store.obj_first_mission_ready = True
+
