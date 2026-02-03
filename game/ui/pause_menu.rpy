@@ -1,6 +1,6 @@
 # pause_menu.rpy
 
-init -3 python:
+python:
     def player_sprite():
         # match your on-disk naming, five fields:
         emo_name  = f"{player_gender}_{player_race}_{player_outfit}_{player_body}_{player_emotion}.png"

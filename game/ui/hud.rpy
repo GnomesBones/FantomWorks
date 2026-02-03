@@ -9,7 +9,9 @@
 # ---------------------------------------------------------------------------
 
 define HUD_POS = {
-    "player_status_border": (325, 0.70),
+    "objective_text":      (1250, 0.05),
+
+    "player_status_border": (325, 0.60),
     "equipment_border":     (1650, 0.70),
     "icon_border":          (20, 0.70),
 
@@ -20,7 +22,7 @@ define HUD_POS = {
 
     "sanity_group":         (115, 0.05),
 
-    "status_row":           (350, 0.765),
+    "status_row":           (350, 0.665),
     "status_spacing":       20,
 
     "tooltip":              (380, 0.86),
@@ -115,6 +117,7 @@ screen hud_display():
     zorder 10
 
     default hud_tip = ""
+    
 
     if hud_should_show():
 
@@ -198,6 +201,18 @@ screen hud_display():
                     size 22
                     color "#FFFFFF"
                     outlines [(2, "#000000AA")]
+
+
+            # Objective text
+            $ obj_x, obj_y = HUD_POS["objective_text"]
+
+            text "Objective: [objective_text()]":
+                xpos obj_x
+                ypos obj_y
+                size 24
+                color "#FFFFFF"
+                outlines [(2, "#000000AA")]
+
 
             # Buttons
             vbox:
