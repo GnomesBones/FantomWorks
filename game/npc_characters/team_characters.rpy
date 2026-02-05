@@ -422,12 +422,15 @@ default team = {
 # Rename the left side identifiers if different speaking tags are preferred.
 ##############################################################################
 
-define DETECTIVE  = Character("[team['the_detective']['meta']['name']]",  color=team["the_detective"]["meta"]["color"])
-define PSYCHIC    = Character("[team['the_psychic']['meta']['name']]",    color=team["the_psychic"]["meta"]["color"])
-define RESEARCHER = Character("[team['the_researcher']['meta']['name']]", color=team["the_researcher"]["meta"]["color"])
-define EXORCIST   = Character("[team['the_exorcist']['meta']['name']]",   color=team["the_exorcist"]["meta"]["color"])
-define JOCK       = Character("[team['the_jock']['meta']['name']]",       color=team["the_jock"]["meta"]["color"])
-define PRIEST     = Character("[team['the_priest']['meta']['name']]",     color=team["the_priest"]["meta"]["color"])
+# Speaker objects must not depend on default store variables like team.
+# Keep these as constants.
+
+define DETECTIVE  = Character("Detective Lena Hart", color="#BBD2FF")
+define PSYCHIC    = Character("Ezra Moon",          color="#FFBDEB")
+define RESEARCHER = Character("Dr. Riley Voss",     color="#B8FFF4")
+define EXORCIST   = Character("Sister May Castella",color="#FFD6A6")
+define JOCK       = Character("Brandon Steele",     color="#C7FFB8")
+define PRIEST     = Character("Father Dominic \"Dom\" Reyes", color="#FFF1B8")
 
 
 ##############################################################################

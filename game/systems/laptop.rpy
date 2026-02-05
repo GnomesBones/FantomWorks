@@ -28,11 +28,11 @@ screen laptop():
     if laptop_page == "home":
         use laptop_home_interactions
     elif laptop_page == "inneed":
-        pass
+        use laptop_inneed_interactions
     elif laptop_page == "notreddit":
         use laptop_notreddit_interactions
     elif laptop_page == "schedule":
-        pass
+        use laptop_schedule_interactions
     elif laptop_page == "utoob":
         pass
     elif laptop_page == "webdive":

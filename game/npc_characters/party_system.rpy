@@ -1,5 +1,10 @@
 # party_system.rpy
 # Pick up to 3 teammates for a mission.
+# Uses the team database keys like: "the_detective", "the_psychic", etc.
+
+##############################################################################
+# 1) Party state
+##############################################################################
 
 # Current selected mission party
 default party = []              # example: ["the_detective", "the_psychic", "the_priest"]
@@ -14,6 +19,11 @@ default roster_unlocked = set([
     "the_jock",
     "the_priest",
 ])
+
+
+##############################################################################
+# 2) Party helper functions
+##############################################################################
 
 init python:
 
@@ -41,7 +51,7 @@ init python:
 
 
 ##############################################################################
-# Screen: Party Selection
+# 3) Screen: Party Selection
 ##############################################################################
 
 screen party_select():
@@ -56,6 +66,7 @@ screen party_select():
         hbox:
             spacing 10
             text "Selected: [len(party)] / [party_limit]"
+
             if len(party) > 0:
                 text " | "
                 text ", ".join([team[k]["meta"]["name"] for k in party])
@@ -63,7 +74,6 @@ screen party_select():
         # Show roster buttons
         for k in team.keys():
             if k in roster_unlocked:
-                $ name = team[k]["meta"]["name"]
 
                 hbox:
                     spacing 10
@@ -78,7 +88,8 @@ screen party_select():
                         else:
                             textbutton "Add" action Function(party_add, k)
 
-                    text "[name]"
+                    # Name display (no $ python line inside screen language)
+                    text "[team[k]['meta']['name']]"
 
         null height 10
 
@@ -86,9 +97,11 @@ screen party_select():
         hbox:
             spacing 10
             textbutton "Clear" action Function(party_clear)
-            textbutton "Back" action Return()
 
-        # Start mission only when exactly 3 selected
+            # Return(False) means not confirmed
+            textbutton "Back" action Return(False)
+
+        # Confirm only when exactly 3 selected
         if len(party) == party_limit:
             textbutton "Confirm Team" action Return(True)
         else:
@@ -96,7 +109,7 @@ screen party_select():
 
 
 ##############################################################################
-# Mission flow
+# 4) Mission flow
 ##############################################################################
 
 label choose_team_for_mission:
@@ -105,10 +118,10 @@ label choose_team_for_mission:
     $ party_clear()
 
     # Open selection UI
-    $ ok = call screen party_select
+    call screen party_select
 
-    # If closed without confirm, ok may be None
-    if ok is True and len(party) == party_limit:
+    # Ren'Py stores the return value of the last call in _return
+    if _return is True and len(party) == party_limit:
         return
     else:
         # Re-open until a valid team is chosen
@@ -116,6 +129,7 @@ label choose_team_for_mission:
 
 
 label start_mission_example:
+
     call choose_team_for_mission
 
     # Now party always has exactly 3 keys

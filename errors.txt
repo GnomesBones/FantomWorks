@@ -2,9 +2,13 @@
 errors listed below, and try again.
 
 
-File "game/core/game_state.rpy", line 30: expected an indented block after function definition on line 5
-    renpy.show_screen("objective_complete_fx", text_to_chase=text)
-        ^^^^^
+File "game/interactions/apps/interaction_laptop_Inneed.rpy", line 112: Line is indented, but the preceding image statement statement does not expect a block. Please check this line's indentation. You may have forgotten a colon (:).
+    text "[inneed_where]":
+    ^
+
+File "game/interactions/apps/interaction_laptop_Schedule.rpy", line 41: Line is indented, but the preceding image statement statement does not expect a block. Please check this line's indentation. You may have forgotten a colon (:).
+    if inneed_has_active_job and inneed_active_job_id:
+    ^
 
 Ren'Py Version: Ren'Py 8.5.2.26010301
-Mon Feb  2 22:36:37 2026
+Wed Feb  4 20:22:17 2026

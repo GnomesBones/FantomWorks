@@ -1,7 +1,17 @@
-# hud.rpy
-
 ################################################################################
-## Holds HUD state, helper functions, and small data tables.
+# game/ui/hud.rpy
+#
+# Purpose:
+# - HUD state + helpers
+# - HUD screen (always behind menus)
+# - Quick buttons (inventory, map, journal, phone)
+#
+# Key idea:
+# - HUD stays visible during gameplay.
+# - When a menu screen opens (journal, pause, inventory), that menu sits on top.
+# - HUD can either keep drawing underneath, or be hidden while menus are open.
+#   This file keeps HUD drawing underneath (behind) by using zorder and by NOT
+#   hiding it in hud_should_show().
 ################################################################################
 
 # ---------------------------------------------------------------------------
@@ -36,10 +46,6 @@ define HUD_POS = {
 # Helpers
 # ---------------------------------------------------------------------------
 
-# Helpers are small functions that read game data and return something useful for the UI.
-# They do not change game state or make decisions, which keeps them safe and predictable.
-# They exist so the HUD can stay clean without mixing visuals and game logic.
-
 init -2 python:
 
     def player_logo():
@@ -66,20 +72,38 @@ init -2 python:
             return 0.18
 
     def safe_show(screen_name):
+        """
+        Only use this for non-menu overlay screens.
+        Journal is a menu screen, so it should use ShowMenu("journal_ui") instead.
+        """
         if renpy.has_screen(screen_name):
             renpy.show_screen(screen_name)
         else:
             renpy.notify(f"{screen_name} screen not implemented.")
 
     def hud_should_show():
+        """
+        HUD stays available during gameplay.
+        Menu screens appear above it, so it can stay "behind" without being hidden.
+        Keep the exclusions only for screens that would visually clash.
+        """
         if not getattr(store, "hud_visible", False):
             return False
+
+        # Hide during character creation so the UI is clean.
         if renpy.get_screen("character_creation"):
             return False
+
+        # If these menu screens should NOT show HUD underneath, keep these.
+        # To keep HUD behind everything, remove these checks.
         if renpy.get_screen("pause"):
             return False
         if renpy.get_screen("inventory"):
             return False
+
+        # Journal is a menu and will sit on top anyway.
+        # HUD can stay behind it, so no need to hide here.
+
         return True
 
 
@@ -105,7 +129,6 @@ image hud_heartbeat:
 image ghost_chase:
     "images/hud/HUD_ghost.png"
 
-#use this to change starting location, ect
 transform ghost_swoop:
     xalign -0.2 yalign 0.05 alpha 1.0
     linear 1.2 xalign 1.2 alpha 0.0
@@ -119,17 +142,19 @@ style sanity_bar:
     xsize 420
     ysize 42
 
+
 # ---------------------------------------------------------------------------
 # HUD Screen
 # ---------------------------------------------------------------------------
 
-
 screen hud_display():
     modal False
+
+    # HUD zorder should be LOWER than menu screens like journal_ui (zorder 100).
+    # 10 is fine, it will stay behind.
     zorder 10
 
     default hud_tip = ""
-    
 
     if hud_should_show():
 
@@ -166,20 +191,18 @@ screen hud_display():
             add "hud_heartbeat" xpos hb_x ypos hb_y
 
             # -------------------------
-            # Sanity bar (fills behind)
+            # Sanity bar
             # -------------------------
-
             fixed:
                 xpos san_x
                 ypos san_y
 
-                # Smooth display value
+                # Smooth display value (sanity_display should exist in player_state/game_state)
                 $ sanity_display += (sanity - sanity_display) * 1.0
 
                 $ pct = clamp(sanity_display / float(max(1, sanity_max)), 0.0, 1.0)
                 $ fill_w = int(HUD_SANITY["fill_w"] * pct)
 
-                # Green fill FIRST
                 add Solid(
                     HUD_SANITY["fill_color"],
                     xsize=fill_w,
@@ -188,10 +211,11 @@ screen hud_display():
                     xpos HUD_SANITY["fill_x"]
                     ypos HUD_SANITY["fill_y"]
 
-                # Frame LAST
                 add "images/hud/sanity_bar_bg.png"
 
+            # -------------------------
             # Status icons
+            # -------------------------
             hbox:
                 xpos st_x
                 ypos st_y
@@ -214,19 +238,21 @@ screen hud_display():
                     color "#FFFFFF"
                     outlines [(2, "#000000AA")]
 
-
+            # -------------------------
             # Objective text
+            # -------------------------
             $ obj_x, obj_y = HUD_POS["objective_text"]
 
-            text "Objective: [objective_text()]":
+            text "Objective: [obj_current_text()]":
                 xpos obj_x
                 ypos obj_y
                 size 24
                 color "#FFFFFF"
                 outlines [(2, "#000000AA")]
 
-
+            # -------------------------
             # Buttons
+            # -------------------------
             vbox:
                 xpos btn_x
                 ypos btn_y
@@ -242,6 +268,12 @@ screen hud_display():
                     hover "images/hud/map_button.png"
                     action Function(safe_show, "main_map")
 
+                # Journal is a menu screen named "journal_ui"
+                imagebutton:
+                    idle  "images/hud/journal_button.png"
+                    hover "images/hud/journal_button.png"
+                    action ShowMenu("journal_ui")
+
                 imagebutton:
                     idle  "images/hud/phone_button.png"
                     hover "images/hud/phone_button.png"
@@ -249,15 +281,13 @@ screen hud_display():
 
 
 # ---------------------------------------------------------------------------
-# Ghost Animation
+# Objective Complete FX
 # ---------------------------------------------------------------------------
-
 
 screen objective_complete_fx(text_to_chase):
     zorder 200
     modal False
 
-    # Objective text that gets chased away
     text text_to_chase:
         xpos 1250
         ypos 0.05
@@ -266,8 +296,13 @@ screen objective_complete_fx(text_to_chase):
         outlines [(2, "#000000AA")]
         at Move((0, 0.05), (0.9, 0.05), 1.2, xanchor=0.0, yanchor=0.0)
 
-    # Ghost swoops across
     add "ghost_chase" at ghost_swoop
 
-    # Auto-hide after animation
     timer 1.3 action Hide("objective_complete_fx")
+
+
+label objective_complete_fx_show(text_to_show=""):
+    show screen objective_complete_fx(text_to_chase=text_to_show)
+    $ renpy.pause(1.2, hard=True)
+    hide screen objective_complete_fx
+    return

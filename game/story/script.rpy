@@ -31,6 +31,8 @@ label start_story:
         xalign 0.5
         yalign 0.5
 
+    call objectives_begin
+
     $ player_sprite = f"{player_gender}_{player_race}_{player_outfit}_{player_body}_{player_emotion}"
     show expression player_sprite as player:
         xalign 0.5
@@ -42,12 +44,9 @@ label start_story:
     hide player
     with dissolve
 
-    pause
-
+ 
     player "I want to make a ghost hunting team, maybe a post on notreddit."
     window hide
-
-    $ set_objective("post_notreddit")
 
     show screen interaction_bedroom
     show screen hud_display
@@ -56,6 +55,8 @@ label start_story:
     $ add_status("stressed")
     $ lose_sanity(75)
     $ remove_status("stressed")
+
+
 
     jump wait_for_notreddit_post
 
@@ -78,7 +79,5 @@ label after_notreddit_post:
 
     "Within minutes, replies start rolling in."
     "Some helpful. Some unhinged. One includes a blurry photo that might be a ghost, or might be a thumb."
-
-    $ set_objective("meet_team")
 
     return

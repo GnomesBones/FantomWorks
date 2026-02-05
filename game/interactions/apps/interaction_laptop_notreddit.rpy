@@ -89,8 +89,7 @@ init python:
 
         s.notreddit_has_posted = True
 
-        play_objective_complete_fx(OBJECTIVE_TEXT.get("post_notreddit", ""))
-        set_objective("meet_team")
+        renpy.store.obj_complete("prog.onboarding.make_post")
 
         # Optional debug toast
         renpy.notify("Posted to NotReddit.")

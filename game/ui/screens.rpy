@@ -1625,11 +1625,6 @@ style slider_slider:
 
 ## My code start ###
 
-screen global_hotkeys():
-    zorder 100
-    key "K_j" action ShowMenu("journal")
-
-
 
 ## This contains custom style and transform  ####
 
