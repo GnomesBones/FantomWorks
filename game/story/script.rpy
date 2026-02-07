@@ -56,28 +56,4 @@ label start_story:
     $ lose_sanity(75)
     $ remove_status("stressed")
 
-
-
-    jump wait_for_notreddit_post
-
-
-label wait_for_notreddit_post:
-
-    if notreddit_has_posted:
-        call after_notreddit_post
-        return
-
-    "I should post first."
-    call screen laptop
-
-    jump wait_for_notreddit_post
-
-
-label after_notreddit_post:
-
-    hide screen laptop
-
-    "Within minutes, replies start rolling in."
-    "Some helpful. Some unhinged. One includes a blurry photo that might be a ghost, or might be a thumb."
-
     return

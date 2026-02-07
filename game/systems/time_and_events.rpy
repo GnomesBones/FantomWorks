@@ -1,100 +1,59 @@
 ################################################################################
 # game/systems/time_and_events.rpy
 #
-# SYSTEM: TIME + EVENT SCHEDULER
+# SYSTEM: TIME + EVENT SCHEDULER + ACTIVITY POINTS
 #
-# ROLE IN PROJECT:
-# - Controls in-world time (days + narrative blocks)
-# - Drives delayed story beats
-# - Handles "waiting" in a story-friendly way
-# - Replaces hardcoded jumps and fake timers
+# INTEGRATES WITH:
+# - game/core/game_state.rpy  (replies + shared app flags)
+# - game/systems/objectives.rpy (sleep gating + objective completion)
 #
-# DESIGN PHILOSOPHY:
-# - Time is discrete, not continuous
-# - Events are condition-based, not scripted chains
-# - Nothing runs twice unless explicitly reset
-#
-# THINK OF THIS AS:
-# A narrative clock + a one-shot story trigger engine
+# DESIGN:
+# - Time is discrete: morning, afternoon, night
+# - A "tick" is one time block
+# - Activity Points (AP) push time forward when threshold is reached
+# - When time changes:
+#     - process reply arrivals (from game_state.rpy)
+#     - run due narrative events (event_queue)
 ################################################################################
 
 ###############################################################################
 # SECTION 1: TIME STATE (PERSISTENT SAVE DATA)
-###############################################################################
-#
-# These variables are saved automatically.
-# They define the "current moment" in the story world.
-#
-# day:
-#   Integer counter. Starts at 1.
-#   Use this for pacing long arcs.
-#
-# time_block:
-#   Narrative granularity.
-#   Blocks represent meaningful story phases.
-#
-# Recommended meaning:
-#   morning   = fresh actions, new posts, travel
-#   afternoon = investigation, jobs, replies
-#   night     = reflection, sleep, horror beats
-#
 ###############################################################################
 
 default day = 1
 default time_block = "night"   # "morning" | "afternoon" | "night"
 
 ###############################################################################
-# SECTION 2: EVENT MEMORY
+# SECTION 2: ACTIVITY POINT SYSTEM (PERSISTENT SAVE DATA)
 ###############################################################################
+# Use spend_ap(cost) for actions like:
+# - travel, investigate, job tasks, social, studying
 #
-# event_fired:
-#   Set of event IDs that already ran.
-#   Prevents repeated triggers.
-#
-# event_queue:
-#   List of all scheduled narrative events.
-#   Each event is a dict:
-#
-#   {
-#     "id": "unique.id",
-#     "condition": function returning bool,
-#     "action": function,
-#     "desc": optional string
-#   }
-#
+# When ap_current reaches ap_threshold_per_block, time advances 1 block.
+###############################################################################
+
+default ap_current = 0
+default ap_threshold_per_block = 4
+
+###############################################################################
+# SECTION 3: EVENT MEMORY (PERSISTENT SAVE DATA)
 ###############################################################################
 
 default event_fired = set()
 default event_queue = []
 
 ###############################################################################
-# SECTION 3: STORY FLAGS (CUSTOMIZE FREELY)
+# SECTION 4: STORY FLAGS (CUSTOMIZE FREELY)
 ###############################################################################
-#
-# These are narrative switches.
-# They are NOT part of the scheduler itself.
-# They exist to feed conditions into it.
-#
-# Add new flags as the story grows.
-# Never delete old ones mid-project.
-#
+# Keep long-term story flags here.
+# Do NOT duplicate app progression flags that live in core/game_state.rpy.
 ###############################################################################
-
-default first_job_done = False
-
-default replies_batch_1_ready = False
-default replies_batch_2_ready = False
 
 default meetup_set = False
 default meetup_available = False
 
 ###############################################################################
-# SECTION 4: CORE TIME ENGINE
-###############################################################################
-#
-# This is the only place that time advances.
-# Everything else reacts to it.
-#
+# SECTION 5: CORE TIME ENGINE
 ###############################################################################
 
 init python:
@@ -106,6 +65,70 @@ init python:
             return TIME_BLOCKS.index(tb)
         except:
             return 0
+
+    def current_tick():
+        """
+        Converts (day, time_block) into a single integer tick.
+
+        tick 0 = day 1 morning
+        tick 1 = day 1 afternoon
+        tick 2 = day 1 night
+        tick 3 = day 2 morning
+        """
+        return ((int(store.day) - 1) * len(TIME_BLOCKS)) + time_index(store.time_block)
+
+    def set_time_from_tick(tick):
+        """
+        Converts a tick back into (day, time_block).
+        """
+        tick = int(tick)
+        blocks = len(TIME_BLOCKS)
+
+        if tick < 0:
+            tick = 0
+
+        store.day = (tick // blocks) + 1
+        store.time_block = TIME_BLOCKS[tick % blocks]
+
+    def after_time_change():
+        """
+        Single place to react whenever time changes.
+        - Process reply arrivals (game_state.rpy)
+        - Run due narrative events (event_queue)
+        - Reset AP for the new block
+        - Auto-advance objective steps that depend on time/replies
+        """
+        # Replies arriving (from core/game_state.rpy)
+        try:
+            process_reply_arrivals(current_tick())
+        except Exception as ex:
+            renpy.log("Reply arrival processing error: %r" % ex)
+
+        # Fire scheduled narrative events
+        try:
+            run_due_events()
+        except Exception as ex:
+            renpy.log("Event processing error: %r" % ex)
+
+        # Reset AP for the new time block (recommended)
+        store.ap_current = 0
+
+        # Objective hooks (optional but useful for your onboarding flow)
+        # Auto-complete "wait for replies" when any reply arrives
+        try:
+            if getattr(store, "pinned_step_id", None) == "prog.onboarding.wait_replies_1":
+                if any([r.arrived for r in store.replies]):
+                    obj_complete(None)
+        except Exception as ex:
+            renpy.log("Objective hook wait_replies_1 error: %r" % ex)
+
+        # Auto-complete "read replies mandatory" when all mandatory are read
+        try:
+            if getattr(store, "pinned_step_id", None) == "prog.onboarding.read_replies_mandatory":
+                if all_mandatory_read():
+                    obj_complete(None)
+        except Exception as ex:
+            renpy.log("Objective hook read_replies_mandatory error: %r" % ex)
 
     def advance_time_block(steps=1):
         """
@@ -122,43 +145,52 @@ init python:
 
         store.time_block = TIME_BLOCKS[i]
 
+        after_time_change()
+
     def sleep_advance():
         """
-        Called by beds / sleep actions.
-        Advances time and runs due events.
+        Called by bed / sleep actions.
+        Default behavior: advance by 1 block.
         """
         advance_time_block(1)
-        run_due_events()
 
 ###############################################################################
-# SECTION 5: EVENT QUEUE API
+# SECTION 6: ACTIVITY POINT API
 ###############################################################################
-#
-# This is the heart of the scheduler.
-#
-# Events are:
-# - Registered once
-# - Checked often
-# - Fired once
-#
+# Call spend_ap(cost) after actions.
+# If threshold reached, time advances automatically.
 ###############################################################################
+
+init python:
+
+    def spend_ap(cost=1):
+        """
+        Adds AP and advances time when threshold is reached.
+        Returns True if time advanced at least once.
+        """
+        cost = int(cost)
+        if cost < 0:
+            cost = 0
+
+        store.ap_current += cost
+
+        advanced = False
+        while store.ap_current >= int(store.ap_threshold_per_block):
+            store.ap_current -= int(store.ap_threshold_per_block)
+            advance_time_block(1)
+            advanced = True
+
+        return advanced
+
+###############################################################################
+# SECTION 7: EVENT QUEUE API
+###############################################################################
+# Heart of the scheduler. Events fire once.
+###############################################################################
+
+init python:
 
     def queue_event(event_id, condition_fn, action_fn, description=""):
-        """
-        Registers a narrative event.
-
-        event_id:
-            Unique string identifier.
-
-        condition_fn:
-            Function returning True when event should fire.
-
-        action_fn:
-            Function that executes story logic.
-
-        description:
-            Optional debug label.
-        """
         store.event_queue.append({
             "id": event_id,
             "condition": condition_fn,
@@ -193,13 +225,10 @@ init python:
         renpy.restart_interaction()
 
 ###############################################################################
-# SECTION 6: CONDITION HELPERS
+# SECTION 8: CONDITION HELPERS
 ###############################################################################
-#
-# These exist to keep event definitions readable.
-# Add more as needed.
-#
-###############################################################################
+
+init python:
 
     def is_day_at_least(n):
         return store.day >= int(n)
@@ -208,67 +237,30 @@ init python:
         return store.time_block == tb
 
 ###############################################################################
-# SECTION 7: EVENT ACTIONS (STORY EFFECTS)
-###############################################################################
-#
-# These functions mutate story state.
-# They are what actually "happen".
-#
+# SECTION 9: EVENT ACTIONS (STORY EFFECTS)
 ###############################################################################
 
-    def unlock_replies_batch_1():
-        store.replies_batch_1_ready = True
-        renpy.notify("New replies arrived.")
-
-    def unlock_replies_batch_2():
-        store.replies_batch_2_ready = True
-        renpy.notify("More replies arrived.")
-        try:
-            obj_pin("prog.onboarding.read_replies_mandatory")
-        except:
-            pass
+init python:
 
     def unlock_meetup():
         store.meetup_available = True
         renpy.notify("Meet-up is now available.")
 
 ###############################################################################
-# SECTION 8: EVENT REGISTRATION
+# SECTION 10: EVENT REGISTRATION
 ###############################################################################
-#
-# This is where story logic gets scheduled.
-# This is the only section that grows long-term.
-#
+# Keep this for long-term scheduled story beats.
+# Replies are scheduled by your app logic and arrive via game_state.rpy.
 ###############################################################################
+
+init python:
 
     def register_core_events():
         """
         Called once at game start.
         """
 
-        # Partial replies after first job
-        queue_event(
-            event_id="ev.replies.batch1",
-            description="Replies after first job",
-            condition_fn=lambda:
-                store.first_job_done and
-                is_day_at_least(2) and
-                not store.replies_batch_1_ready,
-            action_fn=unlock_replies_batch_1
-        )
-
-        # Mandatory replies later
-        queue_event(
-            event_id="ev.replies.batch2",
-            description="Mandatory replies later",
-            condition_fn=lambda:
-                store.replies_batch_1_ready and
-                is_day_at_least(3) and
-                not store.replies_batch_2_ready,
-            action_fn=unlock_replies_batch_2
-        )
-
-        # Meet-up unlock
+        # Meet-up unlock example
         queue_event(
             event_id="ev.meetup.unlock",
             description="Meet-up available",
@@ -279,17 +271,30 @@ init python:
         )
 
 ###############################################################################
-# SECTION 9: ENTRY POINT LABELS
-###############################################################################
-#
-# These are called by story scripts.
-#
+# SECTION 11: ENTRY POINT LABELS
 ###############################################################################
 
 label time_system_begin:
     $ register_core_events()
+
+    # Ensure replies exist so inbox is stable even before anything arrives
+    $ ensure_default_replies_exist()
+
+    # Process anything due right now
+    $ process_reply_arrivals(current_tick())
     return
 
 label sleep_and_process:
+
+    # Hard gate sleep behind your objective system.
+    # This prevents bed clipping.
+    if not obj_can_sleep():
+        "Not yet."
+        return
+
+    # Complete the currently pinned sleep step (sleep_1, sleep_2, etc.)
+    $ obj_complete(None)
+
+    # Advance time by one block and process arrivals and events
     $ sleep_advance()
     return
