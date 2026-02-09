@@ -1,23 +1,100 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
 While running game code:
-  File "game/story/script.rpy", line 61, in script
-    jump wait_for_notreddit_post
-renpy.script.LabelNotFound: could not find label 'wait_for_notreddit_post'. Did you mean: 'after_notreddit_post'?
+  File "game/story/script.rpy", line 55, in script
+    pause
+  File "game/ui/hud.rpy", line 152, in execute
+    screen hud_display():
+  File "game/ui/hud.rpy", line 152, in execute
+    screen hud_display():
+  File "game/ui/hud.rpy", line 161, in execute
+    if hud_should_show():
+  File "game/ui/hud.rpy", line 161, in <module>
+    if hud_should_show():
+       ~~~~~~~~~~~~~~~^^ 
+  File "game/ui/hud.rpy", line 99, in hud_should_show
+    if any_screen_open([
+       ^^^^^^^^^^^^^^^  
+NameError: name 'any_screen_open' is not defined
 
 -- Full Traceback ------------------------------------------------------------
 
 Traceback (most recent call last):
-  File "game/story/script.rpy", line 61, in script
-    jump wait_for_notreddit_post
-  File "renpy/ast.py", line 1928, in execute
-    rv = renpy.game.script.lookup(target)
-         ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
-  File "renpy/script.py", line 1201, in lookup
-    raise LabelNotFound(original)
-renpy.script.LabelNotFound: could not find label 'wait_for_notreddit_post'. Did you mean: 'after_notreddit_post'?
+  File "game/story/script.rpy", line 55, in script
+    pause
+  File "renpy/ast.py", line 2241, in execute
+    self.call("execute")
+    ~~~~~~~~~^^^^^^^^^^^
+  File "renpy/ast.py", line 2195, in call
+    return renpy.statements.call(method, parsed, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/statements.py", line 381, in call
+    return method(parsed, *args, **kwargs)
+           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/common/000statements.rpy", line 485, in execute_pause
+    renpy.pause()
+    ~~~~~~~~~~~^^
+  File "renpy/exports/statementexports.py", line 198, in pause
+    rv = renpy.ui.interact(mouse="pause", type="pause", roll_forward=roll_forward, pause=delay, pause_modal=modal)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/ui.py", line 306, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/display/core.py", line 2154, in interact
+    repeat, rv = self.interact_core(
+                 ~~~~~~~~~~~~~~~~~~^
+        preloads=preloads,
+        ^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "renpy/display/core.py", line 2700, in interact_core
+    root_widget.visit_all(lambda d: d.per_interact())
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 457, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 457, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/displayable.py", line 457, in visit_all
+    d.visit_all(callback, seen)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "renpy/display/screen.py", line 503, in visit_all
+    callback(self)
+    ~~~~~~~~^^^^^^
+  File "renpy/display/core.py", line 2700, in <lambda>
+    root_widget.visit_all(lambda d: d.per_interact())
+                                    ~~~~~~~~~~~~~~^^ 
+  File "renpy/display/screen.py", line 514, in per_interact
+    self.update()
+    ~~~~~~~~~~~^^
+  File "renpy/display/screen.py", line 715, in update
+    self.screen.function(**self.scope)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "game/ui/hud.rpy", line 152, in execute
+    screen hud_display():
+  File "game/ui/hud.rpy", line 152, in execute
+    screen hud_display():
+  File "game/ui/hud.rpy", line 161, in execute
+    if hud_should_show():
+  File "renpy/python.py", line 1305, in py_eval
+    return py_eval_bytecode(code, globals, locals)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/python.py", line 1298, in py_eval_bytecode
+    return eval(bytecode, globals, locals)
+           ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "game/ui/hud.rpy", line 161, in <module>
+    if hud_should_show():
+       ~~~~~~~~~~~~~~~^^ 
+  File "game/ui/hud.rpy", line 99, in hud_should_show
+    if any_screen_open([
+       ^^^^^^^^^^^^^^^  
+NameError: name 'any_screen_open' is not defined
 
 Windows-11-10.0.22631-SP0 AMD64
 Ren'Py 8.5.2.26010301
 FantomWorks 1.0
-Wed Feb  4 20:35:58 2026
+Sun Feb  8 22:10:30 2026

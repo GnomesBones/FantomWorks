@@ -518,6 +518,23 @@ init python:
         }
 
 
+    def obj_can_sleep():
+        """
+        Allow sleep only when the currently pinned objective is a sleep step.
+        """
+        sid = getattr(store, "pinned_step_id", None)
+        if not sid:
+            return False
+
+        # Must exist and not already be done.
+        if not obj_exists(sid) or obj_is_done(sid):
+            return False
+
+        # Our sleep steps in your quest are named sleep_1, sleep_2, etc.
+        step = STEP_INDEX[sid]
+        step_id = step.get("id", "")
+        return step_id.startswith("sleep")
+
 ##############################################################################
 # 6) Optional: Completion FX bridge label
 ##############################################################################

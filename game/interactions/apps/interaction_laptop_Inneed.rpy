@@ -3,15 +3,10 @@
 # InNeed app (background skin + overlay UI)
 ################################################################################
 
-# Entry label (optional, if you open apps via labels)
-label open_inneed_app:
-    $ laptop_page = "inneed"
-    return
-
-
+# -------------------------
 # Background image
-image app_inneed_bg = "images/laptop/inneed_screen.png"
-
+# -------------------------
+image app_inneed_bg = "images/laptop/inneed_screen.png" 
 
 # -------------------------
 # State
@@ -56,9 +51,11 @@ init python:
 # Main Screen
 # -------------------------
 screen laptop_inneed_interactions():
+    zorder 200
 
     # Background skin
-    add "app_inneed_bg"
+    add "app_inneed_bg" xpos 0.15 ypos 0.15
+
 
     # Find jobs button
     button:

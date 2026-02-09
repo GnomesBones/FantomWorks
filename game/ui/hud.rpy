@@ -90,6 +90,11 @@ init -2 python:
         if not getattr(store, "hud_visible", False):
             return False
 
+        # Hide HUD while dialogue is happening.
+        # Works for ADV/NVL dialogue, menus, and narration screens.
+        if renpy.get_screen("say") or renpy.get_screen("nvl"):
+            return False
+
         # Hide during character creation so the UI is clean.
         if renpy.get_screen("character_creation"):
             return False

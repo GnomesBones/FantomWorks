@@ -164,4 +164,7 @@ label character_creation:
 
     "Good Luck, [player_name]..."
 
+    $ obj_start_quest("prog.onboarding")
+
+
     jump start_story

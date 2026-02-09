@@ -6,13 +6,6 @@
 
 default hud_visible = True
 
-
-image bg bedroom = ConditionSwitch(
-    "player_pronouns == 'she'", "images/scenes/house/feminine_bedroom_bg.png",
-    "player_pronouns == 'he'", "images/scenes/house/masculine_bedroom_bg.png",
-    "True", "images/scenes/house/bedroom_bg.png"  # Fallback
-)
-
 # Declare characters used by this game. The color argument colorizes the
 # name of the character.
 
@@ -25,6 +18,9 @@ define player = Character("[player_name]", dynamic=True)
 label start_story:
 
     $ current_location = LOC_BEDROOM
+    call time_system_begin
+    call objectives_begin
+
 
     scene bg bedroom with fade:
         zoom 1.0
@@ -49,11 +45,12 @@ label start_story:
     window hide
 
     show screen interaction_bedroom
-    show screen hud_display
 
     $ add_status("hexed")
     $ add_status("stressed")
     $ lose_sanity(75)
     $ remove_status("stressed")
+
+    pause
 
     return

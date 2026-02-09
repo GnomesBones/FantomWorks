@@ -2,13 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/interactions/apps/interaction_laptop_Inneed.rpy", line 112: Line is indented, but the preceding image statement statement does not expect a block. Please check this line's indentation. You may have forgotten a colon (:).
-    text "[inneed_where]":
-    ^
-
-File "game/interactions/apps/interaction_laptop_Schedule.rpy", line 41: Line is indented, but the preceding image statement statement does not expect a block. Please check this line's indentation. You may have forgotten a colon (:).
-    if inneed_has_active_job and inneed_active_job_id:
-    ^
+File "game/interactions/locations/house/interaction_bedroom.rpy", line 20: screen expects a non-empty block.
+    else:
+         ^
 
 Ren'Py Version: Ren'Py 8.5.2.26010301
-Wed Feb  4 20:22:17 2026
+Sun Feb  8 22:22:11 2026

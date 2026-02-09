@@ -35,6 +35,10 @@ default time_block = "night"   # "morning" | "afternoon" | "night"
 default ap_current = 0
 default ap_threshold_per_block = 4
 
+default minutes_into_block = 0
+default minutes_per_ap = 15
+
+
 ###############################################################################
 # SECTION 3: EVENT MEMORY (PERSISTENT SAVE DATA)
 ###############################################################################
@@ -112,6 +116,7 @@ init python:
 
         # Reset AP for the new time block (recommended)
         store.ap_current = 0
+        store.minutes_into_block = 0
 
         # Objective hooks (optional but useful for your onboarding flow)
         # Auto-complete "wait for replies" when any reply arrives
@@ -173,6 +178,7 @@ init python:
             cost = 0
 
         store.ap_current += cost
+        store.minutes_into_block += cost * int(store.minutes_per_ap)
 
         advanced = False
         while store.ap_current >= int(store.ap_threshold_per_block):
@@ -236,6 +242,23 @@ init python:
     def is_time(tb):
         return store.time_block == tb
 
+    def block_start_hour(tb):
+        return {
+            "morning": 8,
+            "afternoon": 14,
+            "night": 20,
+        }.get(tb, 0)
+
+    def clock_time():
+        h = block_start_hour(store.time_block)
+        m = int(store.minutes_into_block)
+
+        h = (h + (m // 60)) % 24
+        m = m % 60
+
+        return f"{h:02}:{m:02}"
+
+
 ###############################################################################
 # SECTION 9: EVENT ACTIONS (STORY EFFECTS)
 ###############################################################################
@@ -255,19 +278,19 @@ init python:
 
 init python:
 
+    # Condition functions must be top-level (pickle-safe + visible here).
+    def cond_meetup_unlock():
+        return store.meetup_set and (not store.meetup_available)
+
     def register_core_events():
         """
         Called once at game start.
         """
-
-        # Meet-up unlock example
         queue_event(
             event_id="ev.meetup.unlock",
+            condition_fn=cond_meetup_unlock,
+            action_fn=unlock_meetup,
             description="Meet-up available",
-            condition_fn=lambda:
-                store.meetup_set and
-                not store.meetup_available,
-            action_fn=unlock_meetup
         )
 
 ###############################################################################

@@ -7,9 +7,6 @@
 # ---------------------------------
 default notreddit_mode = "home"
 
-default notreddit_post_title = ""
-default notreddit_post_body = ""
-
 # Live text shown in the compose popup
 default notreddit_title = ""
 default notreddit_body  = ""
@@ -88,6 +85,9 @@ init python:
         s = renpy.store
 
         s.notreddit_has_posted = True
+
+        s.notreddit_post_title = s.notreddit_title
+        s.notreddit_post_body = s.notreddit_body
 
         renpy.store.obj_complete("prog.onboarding.make_post")
 

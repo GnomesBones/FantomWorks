@@ -79,7 +79,8 @@ label go_map:
 # -----------------
 
 label church_exterior:
-    scene bg church exterior
+    scene bg church exterior:
+        xysize (config.screen_width, config.screen_height)
     "The church sits quiet."
     menu:
         "Go inside":
@@ -88,7 +89,8 @@ label church_exterior:
             jump go_map
 
 label church_interior:
-    scene bg church interior
+    scene bg church interior:
+        xysize (config.screen_width, config.screen_height)
     "It smells like old wood and dust."
     menu:
         "Back outside":
@@ -102,7 +104,8 @@ label church_interior:
 # -----------------
 
 label gym_exterior:
-    scene bg gym exterior
+    scene bg gym exterior:
+        xysize (config.screen_width, config.screen_height)
     "The gym looks abandoned."
     menu:
         "Go inside":
@@ -111,7 +114,8 @@ label gym_exterior:
             jump go_map
 
 label gym_interior:
-    scene bg gym interior
+    scene bg gym interior:
+        xysize (config.screen_width, config.screen_height)
     "The air is stale and heavy."
     menu:
         "Back outside":
@@ -119,15 +123,14 @@ label gym_interior:
         "Back to map":
             jump go_map
 
+# -----------------
+# House
+# -----------------
 
-# -----------------
-# House (starter hub)
-# -----------------
-# The house is more detailed and will likely grow into
-# a small internal navigation map later.
 
 label house_exterior:
-    scene bg house exterior
+    scene bg house exterior:
+        xysize (config.screen_width, config.screen_height)
     "Home doesn't feel safe anymore."
     menu:
         "Go inside":
@@ -136,42 +139,10 @@ label house_exterior:
             jump go_map
 
 label house_entry:
-    scene bg house entry
+    scene bg house entry:
+        xysize (config.screen_width, config.screen_height)
     menu:
         "Hallway":
             jump house_hallway
         "Back outside":
             jump house_exterior
-
-label house_hallway:
-    scene bg house hallway
-    menu:
-        "Kitchen":
-            jump house_kitchen
-        "Bathroom":
-            jump house_bathroom
-        "Bedroom":
-            jump house_bedroom
-        "Back to entry":
-            jump house_entry
-
-label house_kitchen:
-    scene bg house kitchen
-    "The kitchen feels cold."
-    menu:
-        "Back to hallway":
-            jump house_hallway
-
-label house_bathroom:
-    scene bg house bathroom
-    "The mirror makes you uneasy."
-    menu:
-        "Back to hallway":
-            jump house_hallway
-
-label house_bedroom:
-    scene bg house bedroom
-    "Your room. It should feel safe."
-    menu:
-        "Back to hallway":
-            jump house_hallway

@@ -41,6 +41,23 @@ screen laptop():
     # Draw the shell on top
     add "laptop_shell" align (0.5, 0.5) yoffset 50
 
+    # --- HOME BUTTON ---    
+
+    imagebutton:
+        idle "images/laptop/laptop_home_button.png"
+        hover "images/laptop/laptop_home_button_hover.png"
+        xpos 1560 ypos 880
+        action SetVariable("laptop_page", "home")
+
+    # --- TIME DISPLAY ---
+    text "[clock_time()]":
+        xpos 1480
+        ypos 890
+        size 28
+        color "#ffffff"
+
+
+
     # Close controls
     textbutton "Close":
         xpos 1650 ypos 80
