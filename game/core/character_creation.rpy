@@ -150,6 +150,8 @@ screen choose_character():
 ## Begin code ##
 
 label character_creation:
+
+    $ hide_objectives_overlay = True
     
     scene bg bathroom with fade:
         zoom 1.5
@@ -160,10 +162,11 @@ label character_creation:
 
     call screen choose_character
 
-
-
     "Good Luck, [player_name]..."
 
+    $ hide_objectives_overlay = False
+
+    $ obj_discover_quest("prog.onboarding")
     $ obj_start_quest("prog.onboarding")
 
 

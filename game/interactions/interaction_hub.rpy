@@ -5,6 +5,28 @@
 ################################################################################
 
 
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+init python:
+    def can_show_interactions():
+        # Block during dialogue/menu moments
+        if renpy.get_screen("say"):
+            return False
+        if renpy.get_screen("choice"):
+            return False
+        if renpy.get_screen("menu"):
+            return False
+        if renpy.get_screen("nvl"):
+            return False
+
+        # Block if another UI you care about is open
+        if renpy.get_screen("laptop") or renpy.get_screen("inventory"):
+            return False
+
+        return True
+
+
 # Location keys (helps prevent typos later)
 define LOC_BEDROOM  = "bedroom"
 define LOC_KITCHEN  = "kitchen"
@@ -24,6 +46,9 @@ screen interaction_hub():
 
     # If you ever want to temporarily disable interactions, set current_location = None
     if current_location is None:
+        pass
+
+    elif not can_show_interactions():
         pass
 
     elif current_location == LOC_BEDROOM:

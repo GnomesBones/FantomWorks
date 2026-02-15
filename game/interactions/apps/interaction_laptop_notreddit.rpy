@@ -90,7 +90,8 @@ init python:
         s.notreddit_post_body = s.notreddit_body
 
         renpy.store.obj_complete("prog.onboarding.make_post")
-
+        renpy.store.obj_discover_quest("job.intro")
+        
         # Optional debug toast
         renpy.notify("Posted to NotReddit.")
 

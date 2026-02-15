@@ -35,7 +35,7 @@ screen interaction_bedroom():
             xpos 1085 ypos 450    
             idle "images/scenes/house/bedroom_laptop.png"
             hover "images/scenes/house/bedroom_laptop_hover.png"
-            action [Show("laptop"), SetVariable("current_location", None)]   
+            action [Show("laptop")]   
 
         imagebutton:
             xpos 1710 ypos 40    
@@ -51,14 +51,14 @@ screen interaction_bedroom():
                 xpos 20 ypos 520
                 idle "images/scenes/house/feminine_bedroom_bed.png"
                 hover "images/scenes/house/feminine_bedroom_bed_hover.png"
-                action [Hide("interaction_bedroom"), Call("sleep_and_process")]
+                action [Call("sleep_and_process")]
 
 
             imagebutton:
                 xpos 1275 ypos 620
                 idle  "images/scenes/house/feminine_bedroom_phone.png"
                 hover "images/scenes/house/feminine_bedroom_phone_hover.png"
-                action [Hide("interaction_bedroom"), Call("sleep_and_process")]
+                action [Call("sleep_and_process")]
     
 
 
@@ -70,14 +70,14 @@ screen interaction_bedroom():
                 xpos 5 ypos 550
                 idle "images/scenes/house/bedroom_bed.png"
                 hover "images/scenes/house/bedroom_bed_hover.png"
-                action [Hide("interaction_bedroom"), Call("sleep_and_process")]
+                action [Call("sleep_and_process")]
 
         
             imagebutton:
                 xpos 527 ypos 700
                 idle  "images/scenes/house/bedroom_phone.png"
                 hover "images/scenes/house/bedroom_phone_hover.png"
-                action [Hide("interaction_bedroom"), Call("sleep_and_process")]
+                action [Call("sleep_and_process")]
 
 
 
@@ -91,7 +91,7 @@ screen interaction_bedroom():
                 xpos 5 ypos 550
                 idle "images/scenes/house/bedroom_bed.png"
                 hover "images/scenes/house/bedroom_bed_hover.png"
-                action [Hide("interaction_bedroom"), Call("sleep_and_process")]
+                action [Call("sleep_and_process")]
 
 
             imagebutton:
@@ -99,7 +99,7 @@ screen interaction_bedroom():
                 xpos 527 ypos 700          
                 idle  "images/scenes/house/bedroom_phone.png"
                 hover "images/scenes/house/bedroom_phone_hover.png"
-                action [Hide("interaction_bedroom"), Call("sleep_and_process")]
+                action [Call("sleep_and_process")]
 
             
 

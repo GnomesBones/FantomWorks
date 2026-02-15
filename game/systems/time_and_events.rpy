@@ -312,12 +312,33 @@ label sleep_and_process:
     # Hard gate sleep behind your objective system.
     # This prevents bed clipping.
     if not obj_can_sleep():
-        "Not yet."
+        "I'm not tired..."
         return
 
     # Complete the currently pinned sleep step (sleep_1, sleep_2, etc.)
     $ obj_complete(None)
 
-    # Advance time by one block and process arrivals and events
+    # Close interaction UI so it never lingers
+    hide screen interaction_hub
+
+    # Sleep vibe
+#    stop music fadeout 1.0
+#    play sound "audio/sfx/sleep_rustle.ogg"
+#    scene black with fade
+#    pause 0.4
+
+    # Advance time and process events/replies
+    $ old_day = day
+    $ old_block = time_block
     $ sleep_advance()
+
+    # Return to room with a gentle wake
+    scene bg bedroom with fade
+
+    # Show a wake summary using your clock_time()
+    centered "[time_block!c]  |  Day [day]  |  [clock_time()]"
+    pause 0.6
+
+
+    show screen interaction_hub
     return

@@ -1,6 +1,14 @@
 # game/ui/objectives_overlay.rpy
 
 # ---------------------------------------------------------------------------
+# Variables
+# ---------------------------------------------------------------------------
+
+
+default hide_objectives_overlay = False
+
+
+# ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
@@ -17,7 +25,7 @@ screen objectives_overlay():
     zorder 95   # above HUD (10), below menu screens like journal_ui (100)
 
     # Hide during character creation so the UI is clean.
-    if not any([
+    if not hide_objectives_overlay and not any([
         renpy.get_screen("menu"),
         renpy.get_screen("choose_character"),
         renpy.get_screen("pause_menu"),
@@ -40,13 +48,98 @@ screen objectives_overlay():
                 padding (14, 10)
                 xmaximum 520
 
-                # Right-aligned label + wrapped objective text
-                text "Objective: [obj_current_text()]":
-                    xalign 1.0
-                    textalign 1.0
-                    size 24
-                    color "#FFFFFF"
-                    outlines [(2, "#000000AA")]
+# Right-aligned label + wrapped objective text
+                vbox:
+                    spacing 8
+
+                    text "Objective: [obj_current_text()]":
+                        xalign 1.0
+                        textalign 1.0
+                        size 24
+                        color "#FFFFFF"
+                        outlines [(2, "#000000AA")]
+
+                    $ buckets = obj_list_other_active_quests(max_per_type=2)
+
+                    if buckets.get("job_quest"):
+                        text "Jobs:":
+                            xalign 1.0
+                            textalign 1.0
+                            size 18
+                            color "#FFFFFF"
+                            outlines [(2, "#000000AA")]
+
+                        for title, nxt in buckets["job_quest"]:
+                            text "• [title]: [nxt]":
+                                xalign 1.0
+                                textalign 1.0
+                                size 16
+                                color "#FFFFFF"
+                                outlines [(2, "#000000AA")]
+
+                    if buckets.get("investigative"):
+                        text "Investigations:":
+                            xalign 1.0
+                            textalign 1.0
+                            size 18
+                            color "#FFFFFF"
+                            outlines [(2, "#000000AA")]
+
+                        for title, nxt in buckets["investigative"]:
+                            text "• [title]: [nxt]":
+                                xalign 1.0
+                                textalign 1.0
+                                size 16
+                                color "#FFFFFF"
+                                outlines [(2, "#000000AA")]
+
+                    if buckets.get("character_arc"):
+                        text "People:":
+                            xalign 1.0
+                            textalign 1.0
+                            size 18
+                            color "#FFFFFF"
+                            outlines [(2, "#000000AA")]
+
+                        for title, nxt in buckets["character_arc"]:
+                            text "• [title]: [nxt]":
+                                xalign 1.0
+                                textalign 1.0
+                                size 16
+                                color "#FFFFFF"
+                                outlines [(2, "#000000AA")]
+
+                    if buckets.get("ghost_arc"):
+                        text "Hauntings:":
+                            xalign 1.0
+                            textalign 1.0
+                            size 18
+                            color "#FFFFFF"
+                            outlines [(2, "#000000AA")]
+
+                        for title, nxt in buckets["ghost_arc"]:
+                            text "• [title]: [nxt]":
+                                xalign 1.0
+                                textalign 1.0
+                                size 16
+                                color "#FFFFFF"
+                                outlines [(2, "#000000AA")]
+
+                    if buckets.get("player_progression"):
+                        text "Progress:":
+                            xalign 1.0
+                            textalign 1.0
+                            size 18
+                            color "#FFFFFF"
+                            outlines [(2, "#000000AA")]
+
+                        for title, nxt in buckets["player_progression"]:
+                            text "• [title]: [nxt]":
+                                xalign 1.0
+                                textalign 1.0
+                                size 16
+                                color "#FFFFFF"
+                                outlines [(2, "#000000AA")]
 
 # ---------------------------------------------------------------------------
 # Ghost Animation

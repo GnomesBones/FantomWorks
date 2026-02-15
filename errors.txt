@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/ui/objectives_overlay.rpy", line 89: 's' is not a keyword argument or valid child of the text statement.
-    xalign 1s.0
-             ^
+File "game/story/script.rpy", line 120: expected statement.
+    else:
+        ^
 
 Ren'Py Version: Ren'Py 8.5.2.26010301
-Sat Feb 14 18:50:41 2026
+Sat Feb 14 23:08:07 2026

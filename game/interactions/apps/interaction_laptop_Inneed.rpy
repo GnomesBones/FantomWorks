@@ -32,7 +32,7 @@ init python:
         # Populate results when Find Jobs is clicked
         s = renpy.store
         s.inneed_results = [
-            {"id": "job_dogwalk_01", "title": "Dog walk, 30 min", "pay": 25, "where": "Ghoulridge Apts", "posted": "Today"},
+            {"id": "job_nursing_01", "title": "Take care of grandpa, 30 min", "pay": 25, "where": "Ghoulridge Retirement Home", "posted": "Today"},
             {"id": "job_delivery_01", "title": "Drop off a package", "pay": 40, "where": "Downtown", "posted": "1d ago"},
             {"id": "job_houseclean_01", "title": "Quick clean, 2 rooms", "pay": 75, "where": "Riverside", "posted": "3d ago"},
         ]
@@ -58,10 +58,11 @@ screen laptop_inneed_interactions():
 
 
     # Find jobs button
-    button:
-        xpos 1120 ypos 250
-        xsize 310 ysize 85
-        background None
+    imagebutton:
+        idle  "images/laptop/inneed_find_job_button.png"
+        hover "images/laptop/inneed_find_job_button_hover.png"
+        xpos 1220
+        ypos 425
         action [
             Function(inneed_seed_results),
             SetVariable("inneed_mode","feed"),
@@ -102,12 +103,12 @@ screen laptop_inneed_interactions():
 
     # Fake search text
     text "[inneed_query]":
-        xpos 360 ypos 266
+        xpos 540 ypos 435
         size 34
         color "#1b1b1b"
 
     text "[inneed_where]":
-        xpos 820 ypos 266
+        xpos 975 ypos 435
         size 34
         color "#1b1b1b"
 
@@ -124,7 +125,7 @@ screen laptop_inneed_interactions():
 screen inneed_results_list():
 
     viewport:
-        xpos 320 ypos 420
+        xpos 575 ypos 620
         xsize 1080 ysize 420
         mousewheel True
         draggable True
@@ -186,10 +187,11 @@ screen inneed_job_detail():
 
                     if not inneed_has_active_job:
                         textbutton "Accept":
-                            action [
-                                Function(inneed_accept, inneed_selected["id"]),
-                                SetVariable("inneed_mode","feed"),
-                                SetVariable("inneed_selected", None),
-                            ]
+                                action [
+                                    Function(inneed_accept, inneed_selected["id"]),
+                                    Function(obj_complete, "job.intro.accept_first_job"),
+                                    SetVariable("inneed_mode","feed"),
+                                    SetVariable("inneed_selected", None),
+                                ]
                     else:
                         text "Active job already accepted." size 26 color "#1f1f1f"

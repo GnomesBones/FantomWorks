@@ -26,6 +26,9 @@
 
 default pinned_step_id = None
 
+# Quests the player has been assigned / discovered
+default discovered_quests = set()
+
 # Step completion state:
 # { "quest_id.step_id": True/False }
 default step_done = {}
@@ -47,37 +50,32 @@ default apps_enabled = {
 default can_leave_house = False
 
 
-##############################################################################
-# 2) Quest + Step definitions (static)
-##############################################################################
-# Structure:
-# QUESTS = {
-#   "quest_id": {
-#       "type": "investigative" | "character_arc" | "player_progression" | "ghost_arc",
-#       "title": "string",
-#       "description": "string",
-#       "steps": [
-#           { "id": "step_id", "text": "...", "mandatory": True/False,
-#             "pin": True/False, "can_leave_house": True/False,
-#             "enable_apps": ["notreddit", ...],
-#             "auto_next": "quest_id.next_step_id" or None,
-#           },
-#       ]
-#   }
-# }
-#
 # Editing:
 # - Add new quests here.
 # - Add new step ids inside steps lists.
 # - If a step should drive the HUD, set "pin": True.
 
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
 init python:
 
-    QUEST_TYPES = ["investigative", "character_arc", "player_progression", "ghost_arc"]
+    QUEST_TYPES = ["investigative", "character_arc", "player_progression", "ghost_arc", "job_quest"]
 
     # Helper: build full step id
     def _sid(qid, step_id):
         return qid + "." + step_id
+
+    def obj_discover_quest(quest_id):
+        if quest_id in QUESTS:
+            store.discovered_quests.add(quest_id)
+            return True
+        return False
+
+    def obj_is_discovered(quest_id):
+        return quest_id in store.discovered_quests
 
 
     QUESTS = {
@@ -120,16 +118,6 @@ init python:
                     "can_leave_house": False,
                     "enable_apps": ["notreddit"],
                     "auto_next": _sid("prog.onboarding", "check_inneed"),
-                },
-
-                {
-                    "id": "check_inneed",
-                    "text": "Look at InNeed for a job.",
-                    "mandatory": True,
-                    "pin": True,
-                    "can_leave_house": False,
-                    "enable_apps": ["inneed"],
-                    "auto_next": _sid("prog.onboarding", "free_reign_house"),
                 },
 
                 {
@@ -254,8 +242,28 @@ init python:
                 },
             ],
         },
-    }
 
+        # ==============================================================
+        # PLAYER PROGRESSION: ONBOARDING / RECRUITMENT ARC
+        # ==============================================================
+
+        "job.intro": {
+            "type": "job_quest",
+            "title": "Odd Jobs",
+            "description": "Save up some money to buy new equipment.",
+            "steps": [
+                {
+                    "id": "check_inneed",
+                    "text": "Look at InNeed for a job.",
+                    "mandatory": True,
+                    "pin": True,
+                    "can_leave_house": False,
+                    "enable_apps": ["inneed"],
+                    "auto_next": _sid("prog.onboarding", "free_reign_house"),
+                },
+            ],
+        },
+    }
 
 ##############################################################################
 # 3) Indexes for fast lookup
@@ -534,6 +542,69 @@ init python:
         step = STEP_INDEX[sid]
         step_id = step.get("id", "")
         return step_id.startswith("sleep")
+
+    def obj_next_step_text_for_quest(quest_id):
+        """
+        Returns the next step text for a quest (mandatory first, then any incomplete).
+        Returns None if quest is complete.
+        """
+        if quest_id not in QUESTS:
+            return None
+
+        steps = QUESTS[quest_id].get("steps", [])
+
+        # mandatory first
+        for s in steps:
+            full = _sid(quest_id, s["id"])
+            if not obj_is_done(full) and bool(s.get("mandatory", True)):
+                return s.get("text", "")
+
+        # then any incomplete
+        for s in steps:
+            full = _sid(quest_id, s["id"])
+            if not obj_is_done(full):
+                return s.get("text", "")
+
+        return None
+
+
+    def obj_list_other_active_quests(max_per_type=3):
+        """
+        Returns a dict keyed by quest type, each value is a list of display rows:
+        { "job_quest": [(title, next_text), ...], "investigative": [...], ... }
+
+        "Active" here means: it has an incomplete step AND it's not the quest
+        containing the currently pinned objective.
+        """
+        pinned_qid = QUEST_INDEX.get(store.pinned_step_id, None)
+
+        buckets = { t: [] for t in QUEST_TYPES }
+
+        for qid, q in QUESTS.items():
+            if qid == pinned_qid:
+                continue
+            
+            if not obj_is_discovered(qid):
+                continue
+
+            qtype = q.get("type", None)
+            if qtype not in buckets:
+                continue
+
+            nxt = obj_next_step_text_for_quest(qid)
+            if not nxt:
+                continue
+
+            title = q.get("title", qid)
+            buckets[qtype].append((title, nxt))
+
+        # Optional: limit spam
+        if max_per_type is not None:
+            for t in list(buckets.keys()):
+                buckets[t] = buckets[t][:int(max_per_type)]
+
+        return buckets
+
 
 ##############################################################################
 # 6) Optional: Completion FX bridge label

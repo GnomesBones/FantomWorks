@@ -54,14 +54,23 @@ label start_story:
 
     show screen interaction_bedroom
 
-    $ add_status("hexed")
-    $ add_status("stressed")
-    $ lose_sanity(75)
-    $ remove_status("stressed")
-
     # Initialize trackers so we do not spam dialogue on first frame
     $ _last_pinned_step_id = pinned_step_id
     $ _last_objective_history_len = len(objective_history)
+
+    show screen hud_display
+    
+    pause
+    player "Time to take some damage."
+
+    $ add_status("hexed")
+    $ add_status("stressed")
+
+    pause
+    player "Potiion I took has side effects!"    
+
+    $ lose_sanity(75)
+    $ remove_status("stressed")
 
     jump hub_loop
 
@@ -74,9 +83,9 @@ label hub_loop:
 
     # Flavor lines keyed to the FULL step id (quest.step)
     $ _pin_flavor = {
-        "prog.onboarding.sleep_1": "Sleep. Let the internet do its thing.",
-        "prog.onboarding.wait_replies_1": "Objective pinned: Wait for replies. The thread is a slow creature.",
-        "prog.onboarding.check_inneed": "Objective pinned: Check InNeed. Work shows up when you look for it.",
+        "prog.onboarding.sleep_1": "I need some sleep. Let the internet do its thing.",
+        "job.intro.check_inneed": "Objective pinned: Check InNeed. Work shows up when you look for it.",
+        "prog.onboarding.wait_replies_1": "Wait for replies. The thread is a slow creature.",
         "prog.onboarding.free_reign_house": "Objective pinned: Free time. The house feels bigger when you have options.",
         "prog.onboarding.read_replies_mandatory": "Objective pinned: Read replies. You can’t ignore it forever.",
         "prog.onboarding.set_meetup": "Objective pinned: Set the meet up. This is the point of no take-backs.",
@@ -107,5 +116,3 @@ label hub_loop:
         # 3) Keep the hub running
         # The actual progression is driven by your screens calling obj_complete(...)
         pause 0.15
-
-        show screen interaction_bedroom
