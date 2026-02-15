@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/interactions/locations/house/interaction_bedroom.rpy", line 20: screen expects a non-empty block.
-    else:
-         ^
+File "game/ui/objectives_overlay.rpy", line 89: 's' is not a keyword argument or valid child of the text statement.
+    xalign 1s.0
+             ^
 
 Ren'Py Version: Ren'Py 8.5.2.26010301
-Sun Feb  8 22:22:11 2026
+Sat Feb 14 18:50:41 2026

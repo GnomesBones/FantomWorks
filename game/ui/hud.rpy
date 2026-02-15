@@ -14,12 +14,18 @@
 #   hiding it in hud_should_show().
 ################################################################################
 
+
+# ---------------------------------------------------------------------------
+# Variables
+# ---------------------------------------------------------------------------
+
+default hud_visible = True
+
 # ---------------------------------------------------------------------------
 # HUD Placement Config (edit THESE numbers)
 # ---------------------------------------------------------------------------
 
 define HUD_POS = {
-    "objective_text":      (1250, 0.05),
 
     "player_status_border": (325, 0.60),
     "equipment_border":     (1650, 0.70),
@@ -128,25 +134,12 @@ image hud_heartbeat:
     repeat
 
 # ---------------------------------------------------------------------------
-# Ghost Animation
-# ---------------------------------------------------------------------------
-
-image ghost_chase:
-    "images/hud/HUD_ghost.png"
-
-transform ghost_swoop:
-    xalign -0.2 yalign 0.05 alpha 1.0
-    linear 1.2 xalign 1.2 alpha 0.0
-
-
-# ---------------------------------------------------------------------------
 # Styles
 # ---------------------------------------------------------------------------
 
 style sanity_bar:
     xsize 420
     ysize 42
-
 
 # ---------------------------------------------------------------------------
 # HUD Screen
@@ -244,18 +237,6 @@ screen hud_display():
                     outlines [(2, "#000000AA")]
 
             # -------------------------
-            # Objective text
-            # -------------------------
-            $ obj_x, obj_y = HUD_POS["objective_text"]
-
-            text "Objective: [obj_current_text()]":
-                xpos obj_x
-                ypos obj_y
-                size 24
-                color "#FFFFFF"
-                outlines [(2, "#000000AA")]
-
-            # -------------------------
             # Buttons
             # -------------------------
             vbox:
@@ -285,29 +266,3 @@ screen hud_display():
                     action Function(safe_show, "phone_home")
 
 
-# ---------------------------------------------------------------------------
-# Objective Complete FX
-# ---------------------------------------------------------------------------
-
-screen objective_complete_fx(text_to_chase):
-    zorder 200
-    modal False
-
-    text text_to_chase:
-        xpos 1250
-        ypos 0.05
-        size 24
-        color "#FFFFFF"
-        outlines [(2, "#000000AA")]
-        at Move((0, 0.05), (0.9, 0.05), 1.2, xanchor=0.0, yanchor=0.0)
-
-    add "ghost_chase" at ghost_swoop
-
-    timer 1.3 action Hide("objective_complete_fx")
-
-
-label objective_complete_fx_show(text_to_show=""):
-    show screen objective_complete_fx(text_to_chase=text_to_show)
-    $ renpy.pause(1.2, hard=True)
-    hide screen objective_complete_fx
-    return
