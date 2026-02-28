@@ -149,7 +149,7 @@ image ghost_chase:
     "images/hud/HUD_ghost.png"
 
 transform ghost_swoop:
-    xalign -0.2
+    xalign 1.0
     yalign 0.05
     alpha 1.0
     linear 1.2 xalign 1.2 alpha 0.0

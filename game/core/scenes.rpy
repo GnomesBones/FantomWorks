@@ -60,8 +60,12 @@ image bg house bedroom  = "images/scenes/house/bedroom_bg.png"
 # Story content should live in story/ files, not here.
 
 label go_map:
+
     # Central hub entry point.
     # Any system can jump here safely.
+    if not obj_can_leave_house():
+        "You can't leave yet."
+        return
     call screen main_map
     return
 
@@ -145,4 +149,7 @@ label house_entry:
         "Hallway":
             jump house_hallway
         "Back outside":
-            jump house_exterior
+            if not obj_can_leave_house():
+                "You can't leave yet."
+            else:
+                jump house_exterior

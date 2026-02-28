@@ -117,7 +117,7 @@ init python:
                     "pin": True,
                     "can_leave_house": False,
                     "enable_apps": ["notreddit"],
-                    "auto_next": _sid("prog.onboarding", "check_inneed"),
+                    "auto_next": _sid("prog.onboarding", "free_reign_house")
                 },
 
                 {
@@ -259,8 +259,17 @@ init python:
                     "pin": True,
                     "can_leave_house": False,
                     "enable_apps": ["inneed"],
-                    "auto_next": _sid("prog.onboarding", "free_reign_house"),
+                    "auto_next": None,
                 },
+                {
+                    "id": "accept_job",
+                    "text": "Accept a job from InNeed.",
+                    "mandatory": True,
+                    "pin": True,
+                    "can_leave_house": False,
+                    "enable_apps": ["inneed"],
+                    "auto_next": None,
+                }
             ],
         },
     }

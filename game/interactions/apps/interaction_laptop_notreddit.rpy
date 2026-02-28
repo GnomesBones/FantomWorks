@@ -91,6 +91,7 @@ init python:
 
         renpy.store.obj_complete("prog.onboarding.make_post")
         renpy.store.obj_discover_quest("job.intro")
+        renpy.store.obj_start_quest("job.intro")
         
         # Optional debug toast
         renpy.notify("Posted to NotReddit.")

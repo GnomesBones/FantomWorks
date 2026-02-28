@@ -67,7 +67,7 @@ label start_story:
     $ add_status("stressed")
 
     pause
-    player "Potiion I took has side effects!"    
+    player "Oh, no! The potion I took has side effects!"    
 
     $ lose_sanity(75)
     $ remove_status("stressed")

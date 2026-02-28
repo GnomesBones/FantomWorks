@@ -24,6 +24,10 @@ screen laptop():
     # Draw current page
     add "laptop_home" align (0.5, 0.34) yoffset 50
 
+    # If a locked page is selected, force back to home
+    if laptop_page != "home" and not obj_app_enabled(laptop_page):
+        $ laptop_page = "home"
+
     # Route to page-specific interaction layer
     if laptop_page == "home":
         use laptop_home_interactions
@@ -78,12 +82,14 @@ screen laptop_home_interactions():
         idle "images/laptop/inneed_icon.png"
         hover "images/laptop/inneed_icon_hover.png"
         xpos 354 ypos 200
+        sensitive obj_app_enabled("inneed")
         action SetVariable("laptop_page", "inneed")
 
     imagebutton:
         idle "images/laptop/notreddit_icon.png"
         hover "images/laptop/notreddit_icon_hover.png"
         xpos 355 ypos 351
+        sensitive obj_app_enabled("notreddit")
         action SetVariable("laptop_page", "notreddit")
 
     imagebutton:

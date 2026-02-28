@@ -21,6 +21,10 @@ default inneed_mode = "feed"     # "feed" or "detail"
 # Job state hooks
 default inneed_has_active_job = False
 default inneed_active_job_id = None
+default inneed_active_job_type = None
+default inneed_active_job_where = None
+default inneed_active_job_difficulty = 1
+
 
 
 # -------------------------
@@ -32,9 +36,9 @@ init python:
         # Populate results when Find Jobs is clicked
         s = renpy.store
         s.inneed_results = [
-            {"id": "job_nursing_01", "title": "Take care of grandpa, 30 min", "pay": 25, "where": "Ghoulridge Retirement Home", "posted": "Today"},
-            {"id": "job_delivery_01", "title": "Drop off a package", "pay": 40, "where": "Downtown", "posted": "1d ago"},
-            {"id": "job_houseclean_01", "title": "Quick clean, 2 rooms", "pay": 75, "where": "Riverside", "posted": "3d ago"},
+            {"id": "nursing", "title": "Take care of grandpa, 30 min", "pay": 25, "where": "Ghoulridge Retirement Home", "posted": "Today"},
+            {"id": "delivery", "title": "Drop off a package", "pay": 40, "where": "Downtown", "posted": "1d ago"},
+            {"id": "cleaning", "title": "Quick clean, 2 rooms", "pay": 75, "where": "Riverside", "posted": "3d ago"},
         ]
 
     def inneed_accept(job_id):
@@ -45,6 +49,15 @@ init python:
 
         s.inneed_has_active_job = True
         s.inneed_active_job_id = job_id
+
+
+    # Pull details from the selected listing (so we know where to send the player)
+        for j in s.inneed_results:
+            if j.get("id") == job_id:
+                s.inneed_active_job_type = j.get("id")
+                s.inneed_active_job_where = j.get("where")
+                s.inneed_active_job_difficulty = int(j.get("difficulty", 1))
+                break
 
 
 # -------------------------
